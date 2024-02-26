@@ -90,7 +90,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                         },
                         child: Text('Ubah Sandi'),
                         style: ElevatedButton.styleFrom(
-                          primary: Color(0xff3D67FF),
+                          // primary: Color(0xff3D67FF),
                           minimumSize: Size(250, 50),
                           textStyle: GoogleFonts.istokWeb(
                             fontSize: 18,

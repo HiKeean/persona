@@ -30,7 +30,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       // initialRoute: '/home',
       routes: {
-        '/': (context) => SplashScreen(),
+        '/': (context) => HomeScreen(), 
         // '/': (context) => ApprovalListScreen(),
         '/home': (context) => HomeScreen(),
         '/intro': (context) => OnBoardingScreen(),
@@ -52,7 +52,7 @@ class MyApp extends StatelessWidget {
         '/introductionKeuangan': (context) => IntroductionKeuanganScreen(),
         '/profile': (context) => ProfileScreen(),
         '/reminder': (context) => CalendarScreen(),
-        '/reminderAdd': (context) => AddEventScreen(),
+        // '/reminderAdd': (context) => AddEventScreen(selectedDay: DateTime.now()),
         '/notification': (context) => NotificationScreen(),
         '/change_password': (context) => ChangePasswordScreen(),
       },

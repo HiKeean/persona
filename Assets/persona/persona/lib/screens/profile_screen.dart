@@ -137,9 +137,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           Navigator.pushNamed(context, '/change_password');
                         },
                         style: ElevatedButton.styleFrom(
+                          // // primary: Colors.red,
                           // primary: Colors.red,
-                          primary: Color(0xffF0EFEF),
-                          onPrimary: Color(0xffF0EFEF),
+                          // onPrimary: Color(0xffF0EFEF),
                           elevation: 0,
                           minimumSize: Size(screenWidth * 0.85, 60),
                         ),
@@ -173,9 +173,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           logout();
                         },
                         style: ElevatedButton.styleFrom(
-                          // primary: Colors.red,
-                          primary: Color(0xffF0EFEF),
-                          onPrimary: Color(0xffF0EFEF),
+                          // // primary: Colors.red,
+                          // primary: Color(0xffF0EFEF),
+                          // onPrimary: Color(0xffF0EFEF),
                           elevation: 0,
                           minimumSize: Size(screenWidth * 0.85, 60),
                         ),

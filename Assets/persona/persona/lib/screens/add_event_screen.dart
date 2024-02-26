@@ -6,6 +6,9 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class AddEventScreen extends StatefulWidget {
+  final DateTime selectedDay; // Define selectedDay as a parameter
+
+  AddEventScreen({required this.selectedDay});
   @override
   _AddEventState createState() => _AddEventState();
 }
@@ -195,7 +198,9 @@ class _AddEventState extends State<AddEventScreen> {
                           location: locationController.text,
                           reminder: selectedValue ?? '',
                           notes: notesController.text,
-                          date: DateTime.now(),
+                          date: widget.selectedDay,
+                          
+                        
                         );
 
                         Navigator.pop(context, newEvent);

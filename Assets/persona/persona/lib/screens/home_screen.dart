@@ -519,8 +519,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 ElevatedButton(
                   onPressed: () {},
                   style: ElevatedButton.styleFrom(
-                    primary: Color(0xff0366B5),
-                    onPrimary: Colors.white,
+                    // primary: Color(0xff0366B5),
+                    // onPrimary: Colors.white,
                     minimumSize: Size(50.0, 28.0),
                   ),
                   child: Text("See All"),

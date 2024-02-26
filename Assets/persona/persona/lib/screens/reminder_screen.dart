@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:custom_line_indicator_bottom_navbar/custom_line_indicator_bottom_navbar.dart';
-import 'package:persona/screens/add_event_screen.dart' as AddEventScreen;
+import 'package:persona/screens/add_event_screen.dart';
+import 'package:persona/screens/eventList.dart';
 
 class CalendarScreen extends StatefulWidget {
   @override
@@ -11,7 +12,7 @@ class CalendarScreen extends StatefulWidget {
 }
 
 class _CalendarScreenState extends State<CalendarScreen> {
-  late Map<DateTime, List<AddEventScreen.Event>> selectedEvents;
+  late Map<DateTime, List<Event>> selectedEvents;
   CalendarFormat format = CalendarFormat.month;
   DateTime selectedDay = DateTime.now();
   DateTime focusedDay = DateTime.now();
@@ -24,7 +25,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
     super.initState();
   }
 
-  List<AddEventScreen.Event> _getEventsfromDay(DateTime date) {
+  List<Event> _getEventsfromDay(DateTime date) {
     return selectedEvents[date] ?? [];
   }
 
@@ -102,22 +103,22 @@ class _CalendarScreenState extends State<CalendarScreen> {
             firstDay: DateTime(1990),
             lastDay: DateTime(2050),
             calendarFormat: format,
-            onFormatChanged: (CalendarFormat _format) {
-              setState(() {
-                format = _format;
-              });
-            },
+
             startingDayOfWeek: StartingDayOfWeek.sunday,
             daysOfWeekVisible: true,
             onDaySelected: (DateTime selectDay, DateTime focusDay) {
               setState(() {
                 selectedDay = selectDay;
                 focusedDay = focusDay;
+
               });
-              print(focusedDay);
             },
             selectedDayPredicate: (DateTime date) {
-              return isSameDay(selectedDay, date);
+              bool hasEvents = selectedEvents.keys
+                  .any((eventDate) => isSameDay(eventDate, date));
+              bool isSelectedDay = isSameDay(selectedDay, date);
+
+              return hasEvents || isSelectedDay;
             },
             eventLoader: _getEventsfromDay,
             calendarStyle: CalendarStyle(
@@ -163,40 +164,59 @@ class _CalendarScreenState extends State<CalendarScreen> {
             color: Colors.grey,
           ),
           SizedBox(height: 20),
-          ..._getEventsfromDay(selectedDay).map(
-            (AddEventScreen.Event event) => Column(
-              children: [
-                Container(
-                  margin: EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-                  decoration: BoxDecoration(
-                    border: Border.all(),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: ListTile(
-                    title: Text(
-                      event.title,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
+
+          Column(
+  children: selectedEvents.entries.map((entry) {
+    final date = entry.key;
+    final events = entry.value;
+    final focus_day = focusedDay.toString().replaceAll("Z", "");
+    final date_now = date.toString();
+
+    if (focus_day == date_now) {
+      return EventListWidget(events: events);
+    } else {
+      return SizedBox();
+    }
+  }).toList(),
+),
         ],
       ),
       floatingActionButton: FloatingActionButton.extended(
         backgroundColor: Color(0xff7da0ca),
         onPressed: () async {
-          AddEventScreen.Event? newEvent = await Navigator.push(
+          Event? newEvent = await Navigator.push(
             context,
-            MaterialPageRoute(
-                builder: (context) => AddEventScreen.AddEventScreen()),
+            MaterialPageRoute(builder: (context) => AddEventScreen(selectedDay: selectedDay)),
           );
+
+
           if (newEvent != null) {
+            DateTime eventDate = DateTime(
+              newEvent.date!.year,
+              newEvent.date!.month,
+              newEvent.date!.day,
+            );
+
             setState(() {
-              if (selectedEvents[newEvent.date] == null) {
-                selectedEvents[newEvent.date] = [newEvent];
+              DateTime eventDate = DateTime(
+                newEvent.date.year,
+                newEvent.date.month,
+                newEvent.date.day,
+              );
+
+              if (selectedEvents.containsKey(eventDate)) {
+                bool eventExists = selectedEvents[eventDate]!.any((event) =>
+                    event.time == newEvent.time &&
+                    event.title == newEvent.title &&
+                    event.location == newEvent.location &&
+                    event.reminder == newEvent.reminder &&
+                    event.notes == newEvent.notes);
+
+                if (!eventExists) {
+                  selectedEvents[eventDate]!.add(newEvent);
+                }
               } else {
-                selectedEvents[newEvent.date]!.add(newEvent);
+                selectedEvents[eventDate] = [newEvent];
               }
             });
           }
@@ -204,15 +224,6 @@ class _CalendarScreenState extends State<CalendarScreen> {
         label: Text("Add Event"),
         icon: Icon(Icons.add),
       ),
-
-      // floatingActionButton: FloatingActionButton.extended(
-      //   backgroundColor: Color(0xff7da0ca),
-      //   onPressed: () {
-      //     Navigator.pushNamed(context, '/reminderAdd');
-      //   },
-      //   label: Text("Add Event"),
-      //   icon: Icon(Icons.add),
-      // ),
       bottomNavigationBar: BottomNavBar(),
     );
   }
