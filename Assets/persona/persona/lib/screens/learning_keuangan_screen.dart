@@ -137,23 +137,25 @@ class _LearningKeuanganScreenState extends State<LearningKeuanganScreen> {
 
     int _selectedIndex = 2;
     void _onItemTapped(int index) {
-      setState(() {
-        _selectedIndex = index;
-      });
+      if (index != _selectedIndex) {
+        setState(() {
+          _selectedIndex = index;
+        });
 
-      switch (index) {
-        case 0:
-          Navigator.pushNamed(context, '/home');
-          break;
-        case 1:
-          Navigator.pushNamed(context, '/reminder');
-          break;
-        case 2:
-          Navigator.pushNamed(context, '/learning');
-          break;
-        case 3:
-          Navigator.pushNamed(context, '/profile');
-          break;
+        switch (index) {
+          case 0:
+            Navigator.pushNamed(context, '/home');
+            break;
+          case 1:
+            Navigator.pushNamed(context, '/reminder');
+            break;
+          case 2:
+            Navigator.pushNamed(context, '/learning');
+            break;
+          case 3:
+            Navigator.pushNamed(context, '/profile');
+            break;
+        }
       }
     }
 
@@ -185,36 +187,6 @@ class _LearningKeuanganScreenState extends State<LearningKeuanganScreen> {
         ],
       );
     }
-
-    // Widget BottomNavBar() {
-    //   return BottomNavigationBar(
-    //     items: const <BottomNavigationBarItem>[
-    //       BottomNavigationBarItem(
-    //         icon: Icon(Icons.home, color: Color(0xff7da0ca)),
-    //         label: 'Home',
-    //         // backgroundColor: Colors.red,
-    //       ),
-    //       BottomNavigationBarItem(
-    //         icon: Icon(CupertinoIcons.bell_fill, color: Color(0xff7da0ca)),
-    //         label: 'Reminder',
-    //         // backgroundColor: Colors.green,
-    //       ),
-    //       BottomNavigationBarItem(
-    //         icon: Icon(CupertinoIcons.book_solid, color: Color(0xff7da0ca)),
-    //         label: 'Learning',
-    //         // backgroundColor: Colors.purple,
-    //       ),
-    //       BottomNavigationBarItem(
-    //         icon: Icon(Icons.person_rounded, color: Color(0xff7da0ca)),
-    //         label: 'Profile',
-    //         // backgroundColor: Colors.pink,
-    //       ),
-    //     ],
-    //     currentIndex: _selectedIndex,
-    //     selectedItemColor: Color(0xff7798C1),
-    //     onTap: _onItemTapped,
-    //   );
-    // }
 
     return Scaffold(
       backgroundColor: Colors.white,

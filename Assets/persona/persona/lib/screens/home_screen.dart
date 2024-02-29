@@ -57,8 +57,7 @@ class _HomeScreenState extends State<HomeScreen> {
       );
     }
 
-    Widget Welcome(
-        BuildContext context, int notificationCount) {
+    Widget Welcome(BuildContext context, int notificationCount) {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -116,7 +115,6 @@ class _HomeScreenState extends State<HomeScreen> {
       );
     }
 
-    
     Widget EventSlider() {
       return Container(
         padding: const EdgeInsets.only(
@@ -519,8 +517,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 ElevatedButton(
                   onPressed: () {},
                   style: ElevatedButton.styleFrom(
-                    // primary: Color(0xff0366B5),
-                    // onPrimary: Colors.white,
+                    backgroundColor: Color(0xff0366B5),
+                    foregroundColor: Colors.white,
                     minimumSize: Size(50.0, 28.0),
                   ),
                   child: Text("See All"),
@@ -575,24 +573,28 @@ class _HomeScreenState extends State<HomeScreen> {
         ],
       );
     }
-    void _onItemTapped(int index) {
-      setState(() {
-        _selectedIndex = index;
-      });
 
-      switch (index) {
-        case 0:
-          Navigator.pushNamed(context, '/home');
-          break;
-        case 1:
-          Navigator.pushNamed(context, '/reminder');
-          break;
-        case 2:
-          Navigator.pushNamed(context, '/learning');
-          break;
-        case 3:
-          Navigator.pushNamed(context, '/profile');
-          break;
+    int _selectedIndex = 0;
+    void _onItemTapped(int index) {
+      if (index != _selectedIndex) {
+        setState(() {
+          _selectedIndex = index;
+        });
+
+        switch (index) {
+          case 0:
+            Navigator.pushNamed(context, '/home');
+            break;
+          case 1:
+            Navigator.pushNamed(context, '/reminder');
+            break;
+          case 2:
+            Navigator.pushNamed(context, '/learning');
+            break;
+          case 3:
+            Navigator.pushNamed(context, '/profile');
+            break;
+        }
       }
     }
 

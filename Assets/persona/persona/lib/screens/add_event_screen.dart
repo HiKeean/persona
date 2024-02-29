@@ -199,8 +199,6 @@ class _AddEventState extends State<AddEventScreen> {
                           reminder: selectedValue ?? '',
                           notes: notesController.text,
                           date: widget.selectedDay,
-                          
-                        
                         );
 
                         Navigator.pop(context, newEvent);

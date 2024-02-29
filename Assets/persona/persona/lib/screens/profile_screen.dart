@@ -138,8 +138,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         },
                         style: ElevatedButton.styleFrom(
                           // // primary: Colors.red,
-                          // primary: Colors.red,
-                          // onPrimary: Color(0xffF0EFEF),
+                          backgroundColor: Color(0xffF0EFEF),
+                          foregroundColor: Color(0xffF0EFEF),
                           elevation: 0,
                           minimumSize: Size(screenWidth * 0.85, 60),
                         ),
@@ -174,8 +174,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         },
                         style: ElevatedButton.styleFrom(
                           // // primary: Colors.red,
-                          // primary: Color(0xffF0EFEF),
-                          // onPrimary: Color(0xffF0EFEF),
+                          backgroundColor: Color(0xffF0EFEF),
+                          foregroundColor: Color(0xffF0EFEF),
                           elevation: 0,
                           minimumSize: Size(screenWidth * 0.85, 60),
                         ),
@@ -212,23 +212,25 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
     int _selectedIndex = 3;
     void _onItemTapped(int index) {
-      setState(() {
-        _selectedIndex = index;
-      });
+      if (index != _selectedIndex) {
+        setState(() {
+          _selectedIndex = index;
+        });
 
-      switch (index) {
-        case 0:
-          Navigator.pushNamed(context, '/home');
-          break;
-        case 1:
-          Navigator.pushNamed(context, '/reminder');
-          break;
-        case 2:
-          Navigator.pushNamed(context, '/learning');
-          break;
-        case 3:
-          Navigator.pushNamed(context, '/profile');
-          break;
+        switch (index) {
+          case 0:
+            Navigator.pushNamed(context, '/home');
+            break;
+          case 1:
+            Navigator.pushNamed(context, '/reminder');
+            break;
+          case 2:
+            Navigator.pushNamed(context, '/learning');
+            break;
+          case 3:
+            Navigator.pushNamed(context, '/profile');
+            break;
+        }
       }
     }
 
@@ -244,17 +246,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
         indicatorType: IndicatorType.Top,
         customBottomBarItems: [
           CustomBottomBarItems(
-            label: 'Beranda',
+            label: 'Home',
             icon: Icons.home,
           ),
           CustomBottomBarItems(
-            label: 'Jadwal',
+            label: 'Reminder',
             icon: CupertinoIcons.bell_fill,
           ),
           CustomBottomBarItems(
-              label: 'Pembelajaran', icon: CupertinoIcons.book_solid),
+            label: 'Learning',
+            icon: CupertinoIcons.book_solid,
+          ),
           CustomBottomBarItems(
-            label: 'Profil',
+            label: 'Profile',
             icon: Icons.person_rounded,
           ),
         ],

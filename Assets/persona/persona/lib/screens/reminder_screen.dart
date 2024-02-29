@@ -1,4 +1,3 @@
-// import 'package:persona/screens/event_calender.dart';
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:flutter/cupertino.dart';
@@ -37,23 +36,25 @@ class _CalendarScreenState extends State<CalendarScreen> {
 
   int _selectedIndex = 1;
   void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
+    if (index != _selectedIndex) {
+      setState(() {
+        _selectedIndex = index;
+      });
 
-    switch (index) {
-      case 0:
-        Navigator.pushNamed(context, '/home');
-        break;
-      case 1:
-        Navigator.pushNamed(context, '/reminder');
-        break;
-      case 2:
-        Navigator.pushNamed(context, '/learning');
-        break;
-      case 3:
-        Navigator.pushNamed(context, '/profile');
-        break;
+      switch (index) {
+        case 0:
+          Navigator.pushNamed(context, '/home');
+          break;
+        case 1:
+          Navigator.pushNamed(context, '/reminder');
+          break;
+        case 2:
+          Navigator.pushNamed(context, '/learning');
+          break;
+        case 3:
+          Navigator.pushNamed(context, '/profile');
+          break;
+      }
     }
   }
 
@@ -103,17 +104,22 @@ class _CalendarScreenState extends State<CalendarScreen> {
             firstDay: DateTime(1990),
             lastDay: DateTime(2050),
             calendarFormat: format,
-
             startingDayOfWeek: StartingDayOfWeek.sunday,
             daysOfWeekVisible: true,
             onDaySelected: (DateTime selectDay, DateTime focusDay) {
               setState(() {
                 selectedDay = selectDay;
                 focusedDay = focusDay;
-
               });
             },
             selectedDayPredicate: (DateTime date) {
+              DateTime now = DateTime.now();
+              bool isToday = isSameDay(now, date); // Check if the date is today
+
+              if (isToday) {
+                return false; // Skip checking events for today
+              }
+
               bool hasEvents = selectedEvents.keys
                   .any((eventDate) => isSameDay(eventDate, date));
               bool isSelectedDay = isSameDay(selectedDay, date);
@@ -164,21 +170,20 @@ class _CalendarScreenState extends State<CalendarScreen> {
             color: Colors.grey,
           ),
           SizedBox(height: 20),
-
           Column(
-  children: selectedEvents.entries.map((entry) {
-    final date = entry.key;
-    final events = entry.value;
-    final focus_day = focusedDay.toString().replaceAll("Z", "");
-    final date_now = date.toString();
+            children: selectedEvents.entries.map((entry) {
+              final date = entry.key;
+              final events = entry.value;
+              final focus_day = focusedDay.toString().replaceAll("Z", "");
+              final date_now = date.toString();
 
-    if (focus_day == date_now) {
-      return EventListWidget(events: events);
-    } else {
-      return SizedBox();
-    }
-  }).toList(),
-),
+              if (focus_day == date_now) {
+                return EventListWidget(events: events);
+              } else {
+                return SizedBox();
+              }
+            }).toList(),
+          ),
         ],
       ),
       floatingActionButton: FloatingActionButton.extended(
@@ -186,9 +191,9 @@ class _CalendarScreenState extends State<CalendarScreen> {
         onPressed: () async {
           Event? newEvent = await Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => AddEventScreen(selectedDay: selectedDay)),
+            MaterialPageRoute(
+                builder: (context) => AddEventScreen(selectedDay: selectedDay)),
           );
-
 
           if (newEvent != null) {
             DateTime eventDate = DateTime(

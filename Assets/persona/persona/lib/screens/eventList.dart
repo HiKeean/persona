@@ -45,4 +45,3 @@ class EventWidget extends StatelessWidget {
     );
   }
 }
-
