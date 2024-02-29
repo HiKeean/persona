@@ -4,6 +4,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:custom_line_indicator_bottom_navbar/custom_line_indicator_bottom_navbar.dart';
 import 'package:persona/screens/add_event_screen.dart';
 import 'package:persona/screens/eventList.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class CalendarScreen extends StatefulWidget {
   @override
@@ -11,18 +13,77 @@ class CalendarScreen extends StatefulWidget {
 }
 
 class _CalendarScreenState extends State<CalendarScreen> {
-  late Map<DateTime, List<Event>> selectedEvents;
+  late Map<DateTime, List<Event>> selectedEvents = {};
   CalendarFormat format = CalendarFormat.month;
   DateTime selectedDay = DateTime.now();
   DateTime focusedDay = DateTime.now();
-
   TextEditingController _eventController = TextEditingController();
 
-  @override
-  void initState() {
-    selectedEvents = {};
-    super.initState();
+void initState() {
+  super.initState();
+  initializeSelectedEvents();
+}
+
+Future<void> initializeSelectedEvents() async {
+  try {
+    Map<DateTime, List<Event>> events = await get();
+    setState(() {
+      selectedEvents = events;
+    });
+  } catch (e) {
+    print('Error initializing selectedEvents: $e');
+    // Handle the error gracefully
   }
+}
+
+Future<Map<DateTime, List<Event>>> get() async {
+  final response = await http.get(Uri.parse('http://10.10.6.39/flutterapi/crudflutter/read1.php'));
+
+  if (response.statusCode == 200) {
+    final data = json.decode(response.body);
+
+    for (var item in data) {
+      DateTime temp_date = DateTime.parse(item['eventDate']);
+
+      DateTime eventDate = DateTime(
+              temp_date.year,
+              temp_date.month,
+              temp_date.day,
+      );
+      
+      Event newEvent = Event(
+        title: item['title'],
+        time: item['time'],
+        location: item['location'],
+        reminder: item['reminder'],
+        notes: item['notes'],
+        date: eventDate,
+      );
+
+      if (selectedEvents.containsKey(eventDate)) {
+        bool eventExists = selectedEvents[eventDate]!.any((event) =>
+            event.time == newEvent.time &&
+            event.title == newEvent.title &&
+            event.location == newEvent.location &&
+            event.reminder == newEvent.reminder &&
+            event.notes == newEvent.notes);
+
+        if (!eventExists) {
+          selectedEvents[eventDate]!.add(newEvent);
+        }
+      } else {
+        selectedEvents[eventDate] = [newEvent];
+      }
+    }
+
+
+
+    return selectedEvents;
+  } else {
+    throw Exception('Failed to fetch events');
+  }
+}
+
 
   List<Event> _getEventsfromDay(DateTime date) {
     return selectedEvents[date] ?? [];
